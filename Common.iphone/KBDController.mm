@@ -361,7 +361,7 @@ extern int findCode(const char* _s);
 	// left Arrow
 	UIButton* backButton = [UIButton buttonWithType:(UIButtonType)101]; // left-pointing shape!
 	[backButton addTarget:self action:@selector(menuButton:) forControlEvents:UIControlEventTouchUpInside];
-	[backButton setTitle:@"Browse" forState:UIControlStateNormal];
+	[backButton setTitle:@"Back" forState:UIControlStateNormal];
 	
 	// create button item -- possible because UIButton subclasses UIView!
 	UIBarButtonItem* browseItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
@@ -372,7 +372,9 @@ extern int findCode(const char* _s);
 															   target:self
 									action:@selector(optionsButton:)];
 	
+#if !defined(BESTOFFTA)
 	self.emulatorNavItem.rightBarButtonItem = self.optionButton;
+#endif
 	
 	[self.interfaceView addSubview:self.barView];
 	
@@ -568,15 +570,17 @@ extern int findCode(const char* _s);
     [self setInputMode:INPUTMODE_ACCESS+INPUTMODE_HIDDEN];
 	[self setMenuBarVisibility:TRUE]; // So First time users are not lost!
     
+#if !defined(ACTIVEGS_NOMFISUPPORT)
     self.mfiControllerHandler = [[MfiGameControllerHandler alloc] init];
-    __weak typeof(self) weakSelf = self;
+    
     [self.mfiControllerHandler discoverController:^(GCController *gameController) {
-        [weakSelf setupMfiController:gameController];
-        [self setInputMode:inputMode&INPUTMODE_PAD];
+        [self setupMfiController:gameController];
+        [self setInputMode:self->inputMode&INPUTMODE_PAD];
         [pManager setNotificationText:@"mFi Controller Connected"];
     } disconnectedCallback:^{
         [pManager setNotificationText:@"mFi Controller Disconnected"];
     }];
+#endif
     
    
     }
@@ -742,6 +746,7 @@ enum runtimeControlEnum
 
 scontrol  runtimeControlDefs[]={ 
 	
+#if !defined(BESTOFFTA)
     { 
 		RC_SPEED,
 		"Speed",
@@ -770,7 +775,8 @@ scontrol  runtimeControlDefs[]={
 		{ "1MB", "2MB", "4MB",NULL } ,
 		{ 1, 2, 4 },
 		nil
-	},	
+	},
+#endif // BESTOFFTA
     {	
 		RC_DISPLAY,
 		"Display" ,
@@ -786,8 +792,7 @@ scontrol  runtimeControlDefs[]={
 		nil 
 	},
 
-    
-
+#if !defined(BESTOFFTA)
     {	
 		RC_LOCKZOOM,
         "Zoom Control" ,
@@ -818,6 +823,7 @@ scontrol  runtimeControlDefs[]={
 		{ (int)WARP_POINTER, WARP_TOUCHSCREEN,0 },
 		nil
 	},
+#endif // BESTFTA
     { 
 		RC_DISKSOUND,
 		"Disk Drive Sounds",
@@ -1068,6 +1074,7 @@ extern int x_frame_rate ;
 				
 	}
     
+#if !defined(BESTOFFTA)
     // hack in some save state controls
     l += 2.0;
     UILabel* saveStatelabel = [[UILabel alloc] initWithFrame:CGRectMake(OPTIONMARGIN,l,OPTIONWIDTH,LINEHEIGHT)];
@@ -1110,6 +1117,7 @@ extern int x_frame_rate ;
     [loadStateButton addTarget:self action:@selector(loadStateButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.runtimeControlsOptions addSubview:loadStateButton];    
     
+#endif // BESTOFTA
     l+=LINEHEIGHT;
     nbs++;
 	

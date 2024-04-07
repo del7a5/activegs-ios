@@ -22,7 +22,7 @@ extern unsigned char apple2e_disk[];
 	{
 		 memcpy(&g_rom_fc_ff_ptr[2*65536], gsrom01,128*1024);
         
-#ifdef VIRTUALAPPLE
+#if defined(VIRTUALAPPLE) 
         
 #define TOGS(MEM,STR)	\
 {					\
